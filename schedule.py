@@ -37,11 +37,15 @@ def print_weeks():
                 week *= -1
                 away = right
                 home = left
+
             weeks[week].add((away, home))
+            if week == 1:
+                weeks[12].add((home, away))
 
     validate(weeks)
 
-    # need to sort the weeks...
+    # defaultdict seems to keep the items sorted
+    # in key order ... perfect
     for week, teams in weeks.items():
         print "Week {}:".format(week)
         for away, home in teams:
@@ -50,14 +54,29 @@ def print_weeks():
 
 def validate(weeks):
     # each week: 6 games
-    has_six = lambda (week, teams): len(teams) == 6
+    len_six = lambda (week, teams): len(teams) == 6
 
-    bad_teams = funcy.remove(has_six, weeks.items())
+    bad_teams = funcy.remove(len_six, weeks.items())
     if bad_teams:
         print "have bad teams!!!"
         for week, teams in bad_teams:
             print week, ":", teams
         sys.exit(1)
+
+    def tally(hg, game):
+        hg[game[1]] += 1
+        return hg
+
+    all_games = funcy.cat(weeks.values())
+    home_games = reduce(tally, all_games, collections.Counter())
+
+    bad_homes = funcy.remove(lambda (x, y): y == 6, home_games.items())
+    if bad_homes:
+        print "have bad home game count!!!"
+        for owner, homes in bad_homes:
+            print owner, ":", homes
+        sys.exit(1)
+
     return
 
 def parse_args():
