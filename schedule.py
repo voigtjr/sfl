@@ -1,17 +1,20 @@
 #!/usr/bin/env python
+
 import argparse
 import json
-import funcy
+import sys
+import pprint
 
 def verify():
-    teams = None
-    with open('teams.json') as f:
-        teams = json.load(f)
+    schedule = None
+    with open('schedule.json') as f:
+        schedule = json.load(f)
 
-    for name, team in teams.items():
-        home = set(team['home'])
-        away = set(team['away'])
-        print "{}: {} games ({} home)".format(name, len(home|away), len(home))
+    if not schedule:
+        print "invalid schedule"
+        sys.exit(1)
+
+    pprint.pprint(schedule)
 
 def parse_args():
     p = argparse.ArgumentParser()
