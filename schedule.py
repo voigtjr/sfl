@@ -13,11 +13,11 @@ def load_json(filename):
             ret = json.load(f)
 
         if not ret:
-            print "invalid", filename
+            print "derp", filename
         else:
             return ret
     except IOError:
-        print "ioerror", filename
+        print "what?", filename
 
     sys.exit(1)
 
