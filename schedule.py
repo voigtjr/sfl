@@ -4,6 +4,8 @@ import argparse
 import json
 import sys
 import pprint
+import funcy
+import collections
 
 def load_json(filename):
     try:
@@ -21,10 +23,23 @@ def load_json(filename):
 
 def validate():
     schedule = load_json('schedule.json')
-    pprint.pprint(schedule)
-
     draft_order = load_json('draft_order.json')
-    pprint.pprint(draft_order)
+
+    schedule = zip(draft_order, schedule)
+
+    weeks = collections.defaultdict(set)
+
+    for left, sched in schedule:
+        for week, right in zip(sched, draft_order):
+            if not week:
+                break
+            weeks[week].add((left, right))
+
+    for week, teams in weeks.items():
+        print "Week {}:".format(week)
+        for away, home in teams:
+            print away, "at", home
+        print
 
 def parse_args():
     p = argparse.ArgumentParser()
