@@ -21,7 +21,7 @@ def load_json(filename):
 
     sys.exit(1)
 
-def validate():
+def print_weeks():
     schedule = load_json('schedule.json')
     draft_order = load_json('draft_order.json')
 
@@ -39,11 +39,26 @@ def validate():
                 home = left
             weeks[week].add((away, home))
 
+    validate(weeks)
+
+    # need to sort the weeks...
     for week, teams in weeks.items():
         print "Week {}:".format(week)
         for away, home in teams:
             print away, "at", home
         print
+
+def validate(weeks):
+    # each week: 6 games
+    has_six = lambda (week, teams): len(teams) == 6
+
+    bad_teams = funcy.remove(has_six, weeks.items())
+    if bad_teams:
+        print "have bad teams!!!"
+        for week, teams in bad_teams:
+            print week, ":", teams
+        sys.exit(1)
+    return
 
 def parse_args():
     p = argparse.ArgumentParser()
@@ -53,7 +68,7 @@ def parse_args():
 def main():
     args = parse_args()
 
-    validate()
+    print_weeks()
 
 if __name__ == '__main__':
     main()
