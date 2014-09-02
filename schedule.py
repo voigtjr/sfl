@@ -31,7 +31,13 @@ def validate():
 
     for left, sched in schedule:
         for week, right in zip(sched, draft_order):
-            weeks[week].add((left, right))
+            home = right
+            away = left
+            if week < 0:
+                week *= -1
+                away = right
+                home = left
+            weeks[week].add((away, home))
 
     for week, teams in weeks.items():
         print "Week {}:".format(week)
