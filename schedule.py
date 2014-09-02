@@ -6,15 +6,18 @@ import sys
 import pprint
 
 def load_json(filename):
-    ret = None
-    with open(filename) as f:
-        ret = json.load(f)
+    try:
+        with open(filename) as f:
+            ret = json.load(f)
 
-    if not ret:
-        print "invalid", filename
-        sys.exit(1)
+        if not ret:
+            print "invalid", filename
+        else:
+            return ret
+    except IOError:
+        print "ioerror", filename
 
-    return ret
+    sys.exit(1)
 
 def validate():
     schedule = load_json('schedule.json')
