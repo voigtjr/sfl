@@ -21,9 +21,9 @@ def load_json(filename):
 
     sys.exit(1)
 
-def print_weeks():
+def print_weeks(draft_filename):
     schedule = load_json('schedule.json')
-    draft_order = load_json('draft_order.json')
+    draft_order = load_json(draft_filename)
 
     schedule = zip(draft_order, schedule)
 
@@ -60,7 +60,7 @@ def validate(weeks):
     if bad_teams:
         print "have bad teams!!!"
         for week, teams in bad_teams:
-            print week, ":", teams
+            print week, ':', teams
         sys.exit(1)
 
     def tally(hg, game):
@@ -74,7 +74,7 @@ def validate(weeks):
     if bad_homes:
         print "have bad home game count!!!"
         for owner, homes in bad_homes:
-            print owner, ":", homes
+            print owner, ':', homes
         sys.exit(1)
 
     return
@@ -82,12 +82,14 @@ def validate(weeks):
 def parse_args():
     p = argparse.ArgumentParser()
 
+    p.add_argument('draft', help="json list of owners in draft order")
+
     return p.parse_args()
 
 def main():
     args = parse_args()
 
-    print_weeks()
+    print_weeks(args.draft)
 
 if __name__ == '__main__':
     main()
