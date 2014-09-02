@@ -31,8 +31,6 @@ def validate():
 
     for left, sched in schedule:
         for week, right in zip(sched, draft_order):
-            if not week:
-                break
             weeks[week].add((left, right))
 
     for week, teams in weeks.items():
